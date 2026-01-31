@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +32,9 @@ public class TicketController {
 	@PutMapping("/updatelocation")
 	public Ticket updateTicketById(@RequestBody Ticket ticket) {
 		return ticketService.saveTicket(ticket);
+	}
+	@GetMapping("/")
+	public List<Ticket> getAllTicket() {
+		return ticketService.getAllTicket();
 	}
 }

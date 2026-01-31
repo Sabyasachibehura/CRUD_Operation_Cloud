@@ -1,5 +1,6 @@
 package com.example.demo.repo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class TicketServiceImpl implements TicketBookingService{
 	@Override
 	public void deleteTicket(int id) {
 		ticketBookingDAO.deleteById(id);
+	}
+
+	@Override
+	public List<Ticket> getAllTicket() {
+		Iterable<Ticket> all = ticketBookingDAO.findAll();
+		return (List<Ticket>) all;
 	}
 
 }
