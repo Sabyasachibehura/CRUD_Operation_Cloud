@@ -9,4 +9,5 @@ public class RoutingDataSource extends AbstractRoutingDataSource{
         DataSourceContextHolder.DataSourceType type = DataSourceContextHolder.get();
         return (type == null) ? DataSourceContextHolder.DataSourceType.MASTER : type;
     }
+	
 }

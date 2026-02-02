@@ -8,46 +8,62 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
 public class DataSourceConfig {
 
-    @Bean
-    @ConfigurationProperties("spring.datasource.master")
-    public DataSource masterDataSource() {
-        return DataSourceBuilder.create().build();
-    }
+	@Bean
+	@ConfigurationProperties(prefix = "spring.datasource.master")
+	public DataSource masterDataSource() {
+		return DataSourceBuilder.create().type(HikariDataSource.class).build();
+	}
+
+	@Bean
+	@ConfigurationProperties(prefix = "spring.datasource.reader")
+	public DataSource readerDataSource() {
+		return DataSourceBuilder.create().type(HikariDataSource.class).build();
+	}
+
+	@Primary
+	@Bean
+	public DataSource routingDataSource() {
+		Map<Object, Object> targetDataSources = new HashMap<>();
+		targetDataSources.put(DataSourceContextHolder.DataSourceType.MASTER, masterDataSource());
+		targetDataSources.put(DataSourceContextHolder.DataSourceType.READER, readerDataSource());
+
+		RoutingDataSource routingDataSource = new RoutingDataSource();
+		routingDataSource.setDefaultTargetDataSource(masterDataSource());
+		routingDataSource.setTargetDataSources(targetDataSources);
+
+		return routingDataSource;
+	}
+
+	/**
+     * 🔴 THIS IS STEP 3
+     * Hibernate/JPA WILL USE THIS
+     */
 
     @Bean
-    @ConfigurationProperties("spring.datasource.reader")
-    public DataSource readerDataSource() {
-        return DataSourceBuilder.create().build();
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("routingDataSource") DataSource dataSource) {
+
+            LocalContainerEntityManagerFactoryBean emf =
+                    new LocalContainerEntityManagerFactoryBean();
+
+            emf.setDataSource(dataSource);
+            emf.setPackagesToScan("com.yourpackage.entity");
+            emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+
+            return emf;
     }
-
-    @Bean
-    public DataSource routingDataSource() {
-        Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put(DataSourceContextHolder.DataSourceType.MASTER, masterDataSource());
-        targetDataSources.put(DataSourceContextHolder.DataSourceType.READER, readerDataSource());
-
-        RoutingDataSource routingDataSource = new RoutingDataSource();
-        routingDataSource.setDefaultTargetDataSource(masterDataSource());
-        routingDataSource.setTargetDataSources(targetDataSources);
-
-        return routingDataSource;
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource routingDataSource) {
-        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setDataSource(routingDataSource);
-        emf.setPackagesToScan("com.example.entity");
-        emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        return emf;
-    }
+    
+    
 }
 
