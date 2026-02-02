@@ -12,7 +12,7 @@ public class Ticket {
 
 	@Id
 	//IDENTITY ==> Databaes only generates primary key JPA will not do any activity
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ticket_id")
 	private Integer ticketId;
 	@Column(name="pass_name")
