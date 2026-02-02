@@ -28,18 +28,18 @@ public class RedisConfig {
                 .build();
     }
     
-    @Bean
-    public RedisCacheConfiguration redisCacheConfiguration() {
-        return RedisCacheConfiguration.defaultCacheConfig()
-            .serializeKeysWith(
-                RedisSerializationContext.SerializationPair
-                    .fromSerializer(new StringRedisSerializer())
-            )
-            .serializeValuesWith(
-                RedisSerializationContext.SerializationPair
-                    .fromSerializer(new GenericJackson2JsonRedisSerializer())
-            );
-    }
+//    @Bean
+//    public RedisCacheConfiguration redisCacheConfiguration() {
+//        return RedisCacheConfiguration.defaultCacheConfig()
+//            .serializeKeysWith(
+//                RedisSerializationContext.SerializationPair
+//                    .fromSerializer(new StringRedisSerializer())
+//            )
+//            .serializeValuesWith(
+//                RedisSerializationContext.SerializationPair
+//                    .fromSerializer(new GenericJackson2JsonRedisSerializer())
+//            );
+//    }
 }
 
 

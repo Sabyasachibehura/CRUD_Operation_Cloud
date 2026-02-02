@@ -1,4 +1,6 @@
 package com.example.demo.entity;
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +10,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="ticket")
-public class Ticket {
+public class Ticket implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	//IDENTITY ==> Databaes only generates primary key JPA will not do any activity
