@@ -1,0 +1,27 @@
+terTicket = ticket;
+
+            }
+
+	            } else {
+
+		                // New entity
+
+				            masterTicket = ticket;
+
+					            }
+
+
+
+						            return ticketBookingDAO.save(masterTicket);
+
+
+
+							        } finally {
+
+								        DataSourceContextHolder.clear();
+
+									    }
+
+									    }
+
+
