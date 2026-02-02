@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.demo.entity.Ticket;
-import com.example.demo.repo.service.TicketBookingService;
+import com.example.demo.service.TicketBookingService;
 
 @SpringBootApplication
 public class CrudOperationApplication implements CommandLineRunner{

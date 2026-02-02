@@ -9,6 +9,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -23,6 +24,11 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
+@EnableJpaRepositories(
+	    basePackages = "com.example.demo.repo",
+	    entityManagerFactoryRef = "entityManagerFactory",
+	    transactionManagerRef = "transactionManager"
+	)
 public class DataSourceConfig {
 
 	@Bean
@@ -63,7 +69,7 @@ public class DataSourceConfig {
                     new LocalContainerEntityManagerFactoryBean();
 
             emf.setDataSource(dataSource);
-            emf.setPackagesToScan("com.yourpackage.entity");
+            emf.setPackagesToScan("com.example.demo.entity");
             emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
             return emf;
